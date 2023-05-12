@@ -1,7 +1,13 @@
 from typing import Optional
 from fastapi import Body, FastAPI, Path
 from pydantic import BaseModel
+import pymongo
+
+myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+mydb = myclient["book_database"]
+mycol = mydb["books"]
 app = FastAPI()
+
 
 books = {
     1: {
@@ -84,6 +90,8 @@ books = {
         "stock": 12
     }
 }
+
+# x = mycol.insert_one(books)
 
 class Book(BaseModel):
     title: str
