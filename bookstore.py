@@ -114,7 +114,7 @@ def index():
 
 # path parameter
 @app.get('/books/{book_id}')
-def get_book(book_id: int = Path(description="The ID of the book you wantto view", gt=0, lt=3)):
+def get_book(book_id: int = Path(description="The ID of the book you wantto view", gt=0)):
     return books[book_id]
 
 # Query parameter
@@ -151,7 +151,7 @@ def get_student(*, student_id: int, name: Optional[str] = None, test: int):
     return {"Data": "Not Found"}
 
 # Request Body and the Post Method
-@app.post("books/{book_id}")
+@app.post("/books/{book_id}")
 def create_book(book_id: int, book: Book):
     if book_id in books:
         return {"Error": "book exists"}
