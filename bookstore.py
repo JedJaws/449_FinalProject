@@ -234,24 +234,42 @@ def search_book(title: Optional[str] = None, author: Optional[str] = None, min_p
 
 # Request Body and the Post Method
 # DONE
-@app.post("/books/{book_id}")
-def create_book(book_id: int, book: Book):
-    if mycol.find_one({"_id": book_id}) is None:
-        book_title = book.title
-        book_author = book.author
-        book_description = book.description
-        book_price = book.price
-        book_stock = book.stock
+@app.post("/books")
+def create_book(book: Book):
+    num = 0
+    while True:
+        num += 1
+        if mycol.find_one({"_id": num}) is None:
+            book_title = book.title
+            book_author = book.author
+            book_description = book.description
+            book_price = book.price
+            book_stock = book.stock
 
-        x = mydb.books.insert_one({"_id": book_id,
-                                    "title": book_title,
-                                    "author": book_author,
-                                    "description":  book_description,
-                                    "price": book_price,
-                                    "stock": book_stock})
-        return {"Message": "book added successfully"}
+            x = mydb.books.insert_one({"_id": num,
+                                        "title": book_title,
+                                        "author": book_author,
+                                        "description":  book_description,
+                                        "price": book_price,
+                                        "stock": book_stock})
+            return {"Message": "book added successfully"}
+
+    # if mycol.find_one({"_id": book_id}) is None:
+    #     book_title = book.title
+    #     book_author = book.author
+    #     book_description = book.description
+    #     book_price = book.price
+    #     book_stock = book.stock
+
+    #     x = mydb.books.insert_one({"_id": book_id,
+    #                                 "title": book_title,
+    #                                 "author": book_author,
+    #                                 "description":  book_description,
+    #                                 "price": book_price,
+    #                                 "stock": book_stock})
+    #     return {"Message": "book added successfully"}
     
-    return {"Error": "book exists"}
+    # return {"Error": "book exists"}
 
 # PUT method
 # @app.put("/books/{book_id}")
