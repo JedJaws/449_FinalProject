@@ -117,30 +117,30 @@ def get_book(name: str):
             return books[book_id]
     return {"Data": "Not Found"}
 
-# # Query parameter (Optional)
-# @app.get('/get-by-name-optional')
-# def get_student(name: Optional[str] = None):
-#     for student_id in students:
-#         if students[student_id]["name"] == name:
-#             return students[student_id]
-#     return {"Data": "Not Found"}
+# Query parameter (Optional)
+@app.get('/get-by-name-optional')
+def get_book(name: Optional[str] = None):
+    for book_id in books:
+        if books[book_id]["name"] == name:
+            return books[book_id]
+    return {"Data": "Not Found"}
 
-# # Query parameter (Optional) - ERROR without *
-# # * allows us to write parameters anywhere we want
-# @app.get('/get-by-name-optional')
-# def get_student(*, name: Optional[str] = None, test: int):
-#     for student_id in students:
-#         if students[student_id]["name"] == name:
-#             return students[student_id]
-#     return {"Data": "Not Found"}
+# Query parameter (Optional) - ERROR without *
+# * allows us to write parameters anywhere we want
+@app.get('/get-by-name-optional')
+def get_student(*, name: Optional[str] = None, test: int):
+    for book_id in books:
+        if books[book_id]["name"] == name:
+            return books[book_id]
+    return {"Data": "Not Found"}
 
-# # combining path and query parameters
-# @app.get('/get-by-name-optional/{student_id}')
-# def get_student(*, student_id: int, name: Optional[str] = None, test: int):
-#     for student_id in students:
-#         if students[student_id]["name"] == name:
-#             return students[student_id]
-#     return {"Data": "Not Found"}
+# combining path and query parameters
+@app.get('/get-by-name-optional/{student_id}')
+def get_student(*, student_id: int, name: Optional[str] = None, test: int):
+    for book_id in books:
+        if books[book_id]["name"] == name:
+            return books[book_id]
+    return {"Data": "Not Found"}
 
 # Request Body and the Post Method
 @app.post("books/{book_id}")
