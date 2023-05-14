@@ -196,9 +196,9 @@ def search_book(title: Optional[str] = None, author: Optional[str] = None, min_p
     #     return {"Error": "book does not exists"}
     main_q = {}
     if title != None:
-        main_q["title"] = {"$gt": title}
+        main_q["title"] = {"$regex": title}
     if author != None:
-        main_q["author"] = {"$gt": author}
+        main_q["author"] = {"$regex": author}
     if min_price != None and max_price != None:
         main_q["price"] = {"$gt": min_price, "$lt": max_price}
     elif min_price != None:
