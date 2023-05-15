@@ -2,7 +2,7 @@ from typing import Optional
 from flask import Flask, render_template
 from flask_pymongo import PyMongo
 from fastapi import Body, FastAPI, Path
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError, validator
 import pymongo
 from bson.son import SON
 import pprint
@@ -188,6 +188,38 @@ class Book(BaseModel):
     price: float
     stock: int
 
+    @validator('title')
+    def title_must_be_string(cls, v):
+        if not isinstance(v, str):
+            raise ValueError('must be a string')
+        return v
+
+    @validator('author')
+    def author_must_be_string(cls, v):
+        if not isinstance(v, str):
+            raise ValueError('must be a string')
+        return v
+
+    @validator('description')
+    def description_must_be_string(cls, v):
+        if not isinstance(v, str):
+            raise ValueError('must be a string')
+        return v
+
+    @validator('price')
+    def price_must_be_float(cls, v):
+        if not isinstance(v, float):
+            raise ValueError('must be a float')
+        return v
+
+    @validator('stock')
+    def stock_must_be_int(cls, v):
+        if not isinstance(v, int):
+            raise ValueError('must be a int')
+        return v
+
+
+
 class UpdateBook(BaseModel):
     title: Optional[str] = None
     author: Optional[str] = None
@@ -240,9 +272,9 @@ def search_book(title: Optional[str] = None, author: Optional[str] = None, min_p
     #     return {"Error": "book does not exists"}
     main_q = {}
     if title != None:
-        main_q["title"] = {"$regex": title}
+        main_q["title"] = {"$regex": title.title()}
     if author != None:
-        main_q["author"] = {"$regex": author}
+        main_q["author"] = {"$regex": author.title()}
     if min_price != None and max_price != None:
         main_q["price"] = {"$gt": min_price, "$lt": max_price}
     elif min_price != None:
