@@ -4,6 +4,8 @@ from flask_pymongo import PyMongo
 from fastapi import Body, FastAPI, Path
 from pydantic import BaseModel
 import pymongo
+from bson.son import SON
+import pprint
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["book_database"]
@@ -135,6 +137,13 @@ for y in mycol.find():
     print(y)
     print("")
 
+pipeline = [
+    {"$unwind": "$stock"},
+    {"$group": {'_id': None, "count":{"$sum": "$stock"}}}
+]
+
+pprint.pprint(list(mydb.books.aggregate(pipeline)))
+
 
 # print(mycol.find())
 
@@ -176,6 +185,7 @@ def get_books():
     for y in mycol.find():
         book_collection.append(y)
     return book_collection
+
 
 # Query parameter
 # @app.get('/search')
