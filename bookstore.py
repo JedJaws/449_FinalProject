@@ -41,6 +41,8 @@ books = {
 
 mycol.delete_many({})
 
+mydb.books.drop()
+
 x = mydb.books.insert_many([
     {
         "_id": 1,
@@ -130,6 +132,15 @@ x = mydb.books.insert_many([
         "description": "A Moveable Feast is a 1964 memoir and belles-lettres by American author Ernest Hemingway about his years as a struggling expat journalist and writer in Paris during the 1920s. It was published posthumously.",
         "price": 10.99,
         "stock": 13
+    },
+
+    {
+        "_id": 11,
+        "title": "The Old Man and the Sea",
+        "author": "Ernest Hemingway",
+        "description": "The Old Man and the Sea is a novella written by the American author Ernest Hemingway in 1951 in Cayo Blanco, and published in 1952. It was the last major work of fiction written by Hemingway that was published during his lifetime.",
+        "price": 12.99,
+        "stock": 12
     }
 ])
 
