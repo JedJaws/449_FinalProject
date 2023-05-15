@@ -136,6 +136,7 @@ x = mydb.books.insert_many([
 for y in mycol.find():
     print(y)
     print("")
+print("\n\n")
 
 stockPipeline = [
     {"$unwind": "$stock"},
@@ -144,7 +145,7 @@ stockPipeline = [
 
 print("Total number of books in the store: \n")
 pprint.pprint(list(mydb.books.aggregate(stockPipeline)))
-
+print("\n\n")
 
 booksPipeline = [
     {"$unwind": "$title"},
@@ -152,10 +153,21 @@ booksPipeline = [
     {"$sort": SON([("inStock", 1), ("id", -1)])},
     {"$limit": 5}
 ]
-print("\n")
 
 print("The top 5 bestselling books: \n")
 pprint.pprint(list(mydb.books.aggregate(booksPipeline)))
+print("\n\n")
+
+authorPipeline = [
+    {"$unwind": "$author"},
+    {"$group": {"_id": "$author", "numOfBooksInStore": {"$sum": "$stock"}}},
+    {"$sort": SON([("numOfBooksInStore", -1), ("id", -1)])},
+    {"$limit": 5}
+]
+
+print("The top 5 authors with the most books in the store: \n")
+pprint.pprint(list(mydb.books.aggregate(authorPipeline)))
+print("\n")
 # print(mycol.find())
 
 class Book(BaseModel):
