@@ -1,19 +1,16 @@
 # 449_FinalProject
 ## Table of Contents
 1. [Demonstration](https://github.com/JedJaws/449_FinalProject#demonstration)
-2. [POSTMAN](https://github.com/Phuoc-Nguyen-CS/449_MidtermProject#postman)
-   - [Register](https://github.com/Phuoc-Nguyen-CS/449_MidtermProject#register)
-   - [Login](https://github.com/Phuoc-Nguyen-CS/449_MidtermProject#login)
-   - [Upload](https://github.com/Phuoc-Nguyen-CS/449_MidtermProject#upload)
-   - [Uploaded](https://github.com/Phuoc-Nguyen-CS/449_MidtermProject#uploaded)
-3. [Objective](https://github.com/Phuoc-Nguyen-CS/449_MidtermProject#objective)
-4. [Members](https://github.com/Phuoc-Nguyen-CS/449_MidtermProject#members)
+2. [Objective](https://github.com/JedJaws/449_FinalProject#objective)
+3. [Members](https://github.com/JedJaws/449_FinalProject#members)
 
 
 ## Submission Checklist:
- - [ ] Include a requirement.txt file with all the necessary packages.
- - [ ] Include one screenshot including all the endpoints listed in POSTMAN.
- - [ ] Your submission should include a video demonstrating the working of authentication and file handling endpoints
+ - [ ] GitHub repository containing the source code for the project
+ - [ ] Documentation on how to run and use the API with names of all the team
+members. (README.txt)
+ - [ ] A brief video on the project, including the design choices and implementation
+details.
 
 
 ## Demonstration:
@@ -21,7 +18,7 @@
 Uploading File Demo Video:
 [![](https://i0.wp.com/css-tricks.com/wp-content/uploads/2015/11/drag-drop-upload-1.gif?ssl=1)](https://www.youtube.com/watch?v=dz6Oh0MD9Ds&ab_channel=PhuocNguyen)
  
-## Objective:
+## How to run:
 ### Task 1: Setting up the Flask application
 * Create a **new Flask application** and set up the **necessary packages and modules.**
 * **Create a virtual environment** for the application.
