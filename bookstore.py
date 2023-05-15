@@ -129,7 +129,7 @@ x = mydb.books.insert_many([
         "author": "Ernest Hemingway",
         "description": "A Moveable Feast is a 1964 memoir and belles-lettres by American author Ernest Hemingway about his years as a struggling expat journalist and writer in Paris during the 1920s. It was published posthumously.",
         "price": 10.99,
-        "stock": 12
+        "stock": 13
     }
 ])
 
@@ -137,14 +137,25 @@ for y in mycol.find():
     print(y)
     print("")
 
-pipeline = [
+stockPipeline = [
     {"$unwind": "$stock"},
-    {"$group": {'_id': None, "count":{"$sum": "$stock"}}}
+    {"$group": {'_id': None, "inStock":{"$sum": "$stock"}}}
 ]
 
-pprint.pprint(list(mydb.books.aggregate(pipeline)))
+print("Total number of books in the store: \n")
+pprint.pprint(list(mydb.books.aggregate(stockPipeline)))
 
 
+booksPipeline = [
+    {"$unwind": "$title"},
+    {"$group": {"_id": "$title", "inStock": {"$sum": "$stock"}}},
+    {"$sort": SON([("inStock", 1), ("id", -1)])},
+    {"$limit": 5}
+]
+print("\n")
+
+print("The top 5 bestselling books: \n")
+pprint.pprint(list(mydb.books.aggregate(booksPipeline)))
 # print(mycol.find())
 
 class Book(BaseModel):
