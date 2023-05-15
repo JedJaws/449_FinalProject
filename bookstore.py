@@ -144,6 +144,27 @@ x = mydb.books.insert_many([
     }
 ])
 
+mydb.books.create_index(
+    [
+        ("author", 1),
+        ("title", -1)
+    ]
+)
+
+mydb.books.create_index(
+    [
+        ("title", 1),
+        ("stock", -1)
+    ]
+)
+
+mydb.books.create_index(
+    [
+        ("title", 1),
+        ("price", -1)
+    ]
+)
+
 for y in mycol.find():
     print(y)
     print("")
