@@ -6,8 +6,12 @@ from pydantic import BaseModel, ValidationError, validator
 import pymongo
 from bson.son import SON
 import pprint
+import asyncio
+from pymongo import MongoClient
+from pymongo.errors import DuplicateKeyError
+from motor.motor_asyncio import AsyncIOMotorClient
 
-myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+myclient = AsyncIOMotorClient("mongodb://localhost:27017/")
 mydb = myclient["book_database"]
 mycol = mydb["books"]
 app = FastAPI()
@@ -165,19 +169,19 @@ mydb.books.create_index(
     ]
 )
 
-for y in mycol.find():
-    print(y)
-    print("")
-print("\n\n")
+# for y in mycol.find():
+#     print(y)
+#     print("")
+# print("\n\n")
 
 stockPipeline = [
     {"$unwind": "$stock"},
     {"$group": {'_id': None, "inStock":{"$sum": "$stock"}}}
 ]
 
-print("Total number of books in the store: \n")
-pprint.pprint(list(mydb.books.aggregate(stockPipeline)))
-print("\n\n")
+# print("Total number of books in the store: \n")
+# pprint.pprint(list(mydb.books.aggregate(stockPipeline)))
+# print("\n\n")
 
 booksPipeline = [
     {"$unwind": "$title"},
@@ -186,9 +190,9 @@ booksPipeline = [
     {"$limit": 5}
 ]
 
-print("The top 5 bestselling books: \n")
-pprint.pprint(list(mydb.books.aggregate(booksPipeline)))
-print("\n\n")
+# print("The top 5 bestselling books: \n")
+# pprint.pprint(list(mydb.books.aggregate(booksPipeline)))
+# print("\n\n")
 
 authorPipeline = [
     {"$unwind": "$author"},
@@ -197,9 +201,9 @@ authorPipeline = [
     {"$limit": 5}
 ]
 
-print("The top 5 authors with the most books in the store: \n")
-pprint.pprint(list(mydb.books.aggregate(authorPipeline)))
-print("\n")
+# print("The top 5 authors with the most books in the store: \n")
+# pprint.pprint(list(mydb.books.aggregate(authorPipeline)))
+# print("\n")
 # print(mycol.find())
 
 class Book(BaseModel):
@@ -250,26 +254,26 @@ class UpdateBook(BaseModel):
 
 
 @app.get('/')
-def index():
+async def index():
     book_collection = []
-    for y in mycol.find():
+    async for y in mycol.find():
         book_collection.append(y)
     return book_collection
 
 # path parameter
 # DONE
 @app.get('/books/{book_id}')
-def get_book(book_id: int = Path(description="The ID of the book you want to view", gt=0)):
-    if mycol.find_one({"_id": book_id}) is None:
+async def get_book(book_id: int = Path(description="The ID of the book you want to view", gt=0)):
+    if await mycol.find_one({"_id": book_id}) is None:
         return {"Error": "book does not exists"}
-    x = mycol.find_one({"_id": book_id})
+    x = await mycol.find_one({"_id": book_id})
     return x
 
 # DONE
 @app.get('/books')
-def get_books():
+async def get_books():
     book_collection = []
-    for y in mycol.find():
+    async for y in mycol.find():
         book_collection.append(y)
     return book_collection
 
@@ -284,7 +288,7 @@ def get_books():
 
 # Query parameter (Optional)
 @app.get('/search')
-def search_book(title: Optional[str] = None, author: Optional[str] = None, min_price: Optional[float] = None, max_price: Optional[float] = None):
+async def search_book(title: Optional[str] = None, author: Optional[str] = None, min_price: Optional[float] = None, max_price: Optional[float] = None):
     # for book_id in books:
     #     if books[book_id]["name"] == name:
     #         return books[book_id]
@@ -303,10 +307,9 @@ def search_book(title: Optional[str] = None, author: Optional[str] = None, min_p
     elif max_price != None:
         main_q["price"] = {"$lt": max_price}
     # print(main_q)
-    x = mycol.find(main_q)
 
     book_collection = []
-    for y in x:
+    async for y in mycol.find(main_q):
         book_collection.append(y)
     # print(book_collection)
     return book_collection
@@ -332,18 +335,18 @@ def search_book(title: Optional[str] = None, author: Optional[str] = None, min_p
 # Request Body and the Post Method
 # DONE
 @app.post("/books")
-def create_book(book: Book):
+async def create_book(book: Book):
     num = 0
     while True:
         num += 1
-        if mycol.find_one({"_id": num}) is None:
+        if await mycol.find_one({"_id": num}) is None:
             book_title = book.title
             book_author = book.author
             book_description = book.description
             book_price = book.price
             book_stock = book.stock
 
-            x = mydb.books.insert_one({"_id": num,
+            x = await mydb.books.insert_one({"_id": num,
                                         "title": book_title,
                                         "author": book_author,
                                         "description":  book_description,
@@ -386,7 +389,7 @@ def create_book(book: Book):
 # PUT method
 @app.put("/books/{book_id}")
 # DONE
-def update_book(book_id: int, book: UpdateBook):
+async def update_book(book_id: int, book: UpdateBook):
     if mycol.find_one({"_id": book_id}) is None:
         return {"Error": "book does not exists"}
     if book.title != None:
@@ -429,7 +432,7 @@ def update_book(book_id: int, book: UpdateBook):
 # Delete Method
 # DONE
 @app.delete("/delete-book/{book_id}")
-def delete_book(book_id: int):
+async def delete_book(book_id: int):
     if mycol.find_one({"_id": book_id}) is None:
         return {"Error": "book does not exists"}
     
