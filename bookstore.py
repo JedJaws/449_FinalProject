@@ -183,6 +183,11 @@ stockPipeline = [
 # pprint.pprint(list(mydb.books.aggregate(stockPipeline)))
 # print("\n\n")
 
+async def numOfBooks():
+    print("Total number of books in the store: \n")
+    async for doc in mydb.books.aggregate(stockPipeline):
+        print(doc)
+
 booksPipeline = [
     {"$unwind": "$title"},
     {"$group": {"_id": "$title", "inStock": {"$sum": "$stock"}}},
@@ -193,6 +198,10 @@ booksPipeline = [
 # print("The top 5 bestselling books: \n")
 # pprint.pprint(list(mydb.books.aggregate(booksPipeline)))
 # print("\n\n")
+async def top5sellers():
+    print("The top 5 bestselling books: \n")
+    async for doc in mydb.books.aggregate(booksPipeline):
+        print(doc)
 
 authorPipeline = [
     {"$unwind": "$author"},
@@ -201,8 +210,28 @@ authorPipeline = [
     {"$limit": 5}
 ]
 
-# print("The top 5 authors with the most books in the store: \n")
+
+# async def top5authors():
+#     print("The top 5 authors with the most books in the store: \n")
+#     test = await mydb.books.aggregate(authorPipeline)
+#     await list(test)
+
+async def top5authors():
+    totalnumofbooks = await mydb.books.aggregate(stockPipeline).to_list(None)
+    top5sellerslist = await mydb.books.aggregate(booksPipeline).to_list(None)
+    top5authorslist = await mydb.books.aggregate(authorPipeline).to_list(None)
+    print("Total number of books in the store: \n")
+    print(totalnumofbooks)
+    print("The top 5 bestselling books: \n")
+    print(top5sellerslist)
+    print("The top 5 authors with the most books in the store: \n")
+    print(top5authorslist)
+# asyncio.get_event_loop().run_until_complete(numOfBooks())
+# asyncio.get_event_loop().run_until_complete(top5sellers())
+asyncio.get_event_loop().run_until_complete(top5authors())
+# list(mydb.books.aggregate(authorPipeline))
 # pprint.pprint(list(mydb.books.aggregate(authorPipeline)))
+
 # print("\n")
 # print(mycol.find())
 
