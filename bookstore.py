@@ -43,131 +43,132 @@ books = {
     }
 }
 
-mycol.delete_many({})
+async def create():
+    await mycol.delete_many({})
 
-mydb.books.drop()
+    await mydb.books.drop()
 
-x = mydb.books.insert_many([
-    {
-        "_id": 1,
-        "title": "The Catcher in the Rye",
-        "author": "J.D. Salinger",
-        "description": "The Catcher in the Rye is an American novel by J. D. Salinger that was partially published in serial form 1945–46 before being novelized in 1951. Originally intended for adults, it is often read by adolescents for its themes of angst and alienation, and as a critique of superficiality in society.",
-        "price": 8.93,
-        "stock": 7
-    },
+    x = await mydb.books.insert_many([
+        {
+            "_id": 1,
+            "title": "The Catcher in the Rye",
+            "author": "J.D. Salinger",
+            "description": "The Catcher in the Rye is an American novel by J. D. Salinger that was partially published in serial form 1945–46 before being novelized in 1951. Originally intended for adults, it is often read by adolescents for its themes of angst and alienation, and as a critique of superficiality in society.",
+            "price": 8.93,
+            "stock": 7
+        },
 
-    {
-        "_id": 2,
-        "title": "Animal Farm",
-        "author": "George Orwell",
-        "description": "Animal Farm is a beast fable, in the form of a satirical allegorical novella, by George Orwell, first published in England on 17 August 1945. It tells the story of a group of farm animals who rebel against their human farmer, hoping to create a society where the animals can be equal, free, and happy.",
-        "price": 10.76,
-        "stock": 1
-    },
+        {
+            "_id": 2,
+            "title": "Animal Farm",
+            "author": "George Orwell",
+            "description": "Animal Farm is a beast fable, in the form of a satirical allegorical novella, by George Orwell, first published in England on 17 August 1945. It tells the story of a group of farm animals who rebel against their human farmer, hoping to create a society where the animals can be equal, free, and happy.",
+            "price": 10.76,
+            "stock": 1
+        },
 
-    {
-        "_id": 3,
-        "title": "To Kill a Mockingbird",
-        "author": "Harper Lee",
-        "description": "To Kill a Mockingbird is a novel by the American author Harper Lee. It was published in 1960 and was instantly successful. In the United States, it is widely read in high schools and middle schools",
-        "price": 8.89,
-        "stock": 2
-    },
+        {
+            "_id": 3,
+            "title": "To Kill a Mockingbird",
+            "author": "Harper Lee",
+            "description": "To Kill a Mockingbird is a novel by the American author Harper Lee. It was published in 1960 and was instantly successful. In the United States, it is widely read in high schools and middle schools",
+            "price": 8.89,
+            "stock": 2
+        },
 
-    {
-        "_id": 4,
-        "title": "The Story",
-        "author": "A'Ziah King",
-        "description": "about house",
-        "price": 28.00,
-        "stock": 40
-    },
+        {
+            "_id": 4,
+            "title": "The Story",
+            "author": "A'Ziah King",
+            "description": "about house",
+            "price": 28.00,
+            "stock": 40
+        },
 
-    {
-        "_id": 5,
-        "title": "Gump and Co.",
-        "author": "Winston Groom",
-        "description": "Gump & Co. is a 1995 novel by Winston Groom. It is the sequel to his 1986 novel Forrest Gump and the Academy Award-winning 1994 film of the same name starring Tom Hanks. It was written to chronicle Forrest's life throughout the 1980s.",
-        "price": 16.89,
-        "stock": 15
-    },
+        {
+            "_id": 5,
+            "title": "Gump and Co.",
+            "author": "Winston Groom",
+            "description": "Gump & Co. is a 1995 novel by Winston Groom. It is the sequel to his 1986 novel Forrest Gump and the Academy Award-winning 1994 film of the same name starring Tom Hanks. It was written to chronicle Forrest's life throughout the 1980s.",
+            "price": 16.89,
+            "stock": 15
+        },
 
-    {
-        "_id": 6,
-        "title": "The Metamorphosis",
-        "author": "Franz Kafka",
-        "description": "Metamorphosis is a novella written by Franz Kafka which was first published in 1915. One of Kafka's best-known works, Metamorphosis tells the story of salesman Gregor Samsa, who wakes one morning to find himself inexplicably transformed into a huge insect and subsequently struggles to adjust to this new condition.",
-        "price": 10.79,
-        "stock": 2
-    },
+        {
+            "_id": 6,
+            "title": "The Metamorphosis",
+            "author": "Franz Kafka",
+            "description": "Metamorphosis is a novella written by Franz Kafka which was first published in 1915. One of Kafka's best-known works, Metamorphosis tells the story of salesman Gregor Samsa, who wakes one morning to find himself inexplicably transformed into a huge insect and subsequently struggles to adjust to this new condition.",
+            "price": 10.79,
+            "stock": 2
+        },
 
-    {
-        "_id": 7,
-        "title": "White Nights",
-        "author": "Fyodor Dostoevsky",
-        "description": "When his plane makes an emergency landing in Siberia, ballet dancer Nikolai Rodchenko (Mikhail Baryshnikov) is recognized as a defector and brought into custody. Returned to Leningrad and reunited with his former love, aging prima ballerina Galina Ivanova (Helen Mirren), Nikolai meets American dancer Raymond Greenwood (Gregory Hines), who defected to the Soviet Union during the Vietnam War but has secretly grown disenchanted. Together, they plot an escape to the American consulate and freedom.",
-        "price": 7.19,
-        "stock": 6
-    },
+        {
+            "_id": 7,
+            "title": "White Nights",
+            "author": "Fyodor Dostoevsky",
+            "description": "When his plane makes an emergency landing in Siberia, ballet dancer Nikolai Rodchenko (Mikhail Baryshnikov) is recognized as a defector and brought into custody. Returned to Leningrad and reunited with his former love, aging prima ballerina Galina Ivanova (Helen Mirren), Nikolai meets American dancer Raymond Greenwood (Gregory Hines), who defected to the Soviet Union during the Vietnam War but has secretly grown disenchanted. Together, they plot an escape to the American consulate and freedom.",
+            "price": 7.19,
+            "stock": 6
+        },
 
-    {
-        "_id": 8,
-        "title": "Fahrenheit 451",
-        "author": "Ray Bradbury",
-        "description": "Fahrenheit 451 is a 1953 dystopian novel by American writer Ray Bradbury. Fahrenheit 451 presents an American society where books have been personified and outlawed and 'firemen' burn any that are found.",
-        "price": 8.89,
-        "stock": 9
-    },
+        {
+            "_id": 8,
+            "title": "Fahrenheit 451",
+            "author": "Ray Bradbury",
+            "description": "Fahrenheit 451 is a 1953 dystopian novel by American writer Ray Bradbury. Fahrenheit 451 presents an American society where books have been personified and outlawed and 'firemen' burn any that are found.",
+            "price": 8.89,
+            "stock": 9
+        },
 
-    {
-        "_id": 9,
-        "title": "A Clockwork Orange",
-        "author": "Anthony Burgess",
-        "description": "A Clockwork Orange is a dystopian satirical black comedy novel by English writer Anthony Burgess, published in 1962. It is set in a near-future society that has a youth subculture of extreme violence.",
-        "price": 17.89,
-        "stock": 21
-    },
+        {
+            "_id": 9,
+            "title": "A Clockwork Orange",
+            "author": "Anthony Burgess",
+            "description": "A Clockwork Orange is a dystopian satirical black comedy novel by English writer Anthony Burgess, published in 1962. It is set in a near-future society that has a youth subculture of extreme violence.",
+            "price": 17.89,
+            "stock": 21
+        },
 
-    {
-        "_id": 10,
-        "title": "A Moveable Feast",
-        "author": "Ernest Hemingway",
-        "description": "A Moveable Feast is a 1964 memoir and belles-lettres by American author Ernest Hemingway about his years as a struggling expat journalist and writer in Paris during the 1920s. It was published posthumously.",
-        "price": 10.99,
-        "stock": 13
-    },
+        {
+            "_id": 10,
+            "title": "A Moveable Feast",
+            "author": "Ernest Hemingway",
+            "description": "A Moveable Feast is a 1964 memoir and belles-lettres by American author Ernest Hemingway about his years as a struggling expat journalist and writer in Paris during the 1920s. It was published posthumously.",
+            "price": 10.99,
+            "stock": 13
+        },
 
-    {
-        "_id": 11,
-        "title": "The Old Man and the Sea",
-        "author": "Ernest Hemingway",
-        "description": "The Old Man and the Sea is a novella written by the American author Ernest Hemingway in 1951 in Cayo Blanco, and published in 1952. It was the last major work of fiction written by Hemingway that was published during his lifetime.",
-        "price": 12.99,
-        "stock": 12
-    }
-])
+        {
+            "_id": 11,
+            "title": "The Old Man and the Sea",
+            "author": "Ernest Hemingway",
+            "description": "The Old Man and the Sea is a novella written by the American author Ernest Hemingway in 1951 in Cayo Blanco, and published in 1952. It was the last major work of fiction written by Hemingway that was published during his lifetime.",
+            "price": 12.99,
+            "stock": 12
+        }
+    ])
 
-mydb.books.create_index(
-    [
-        ("author", 1),
-        ("title", -1)
-    ]
-)
+    await mydb.books.create_index(
+        [
+            ("author", 1),
+            ("title", -1)
+        ]
+    )
 
-mydb.books.create_index(
-    [
-        ("title", 1),
-        ("stock", -1)
-    ]
-)
+    await mydb.books.create_index(
+        [
+            ("title", 1),
+            ("stock", -1)
+        ]
+    )
 
-mydb.books.create_index(
-    [
-        ("title", 1),
-        ("price", -1)
-    ]
-)
+    await mydb.books.create_index(
+        [
+            ("title", 1),
+            ("price", -1)
+        ]
+    )
 
 # for y in mycol.find():
 #     print(y)
@@ -217,6 +218,7 @@ authorPipeline = [
 #     await list(test)
 
 async def top5authors():
+    await create()
     totalnumofbooks = await mydb.books.aggregate(stockPipeline).to_list(None)
     top5sellerslist = await mydb.books.aggregate(booksPipeline).to_list(None)
     top5authorslist = await mydb.books.aggregate(authorPipeline).to_list(None)
@@ -228,6 +230,7 @@ async def top5authors():
     print(top5authorslist)
 # asyncio.get_event_loop().run_until_complete(numOfBooks())
 # asyncio.get_event_loop().run_until_complete(top5sellers())
+
 asyncio.get_event_loop().run_until_complete(top5authors())
 # list(mydb.books.aggregate(authorPipeline))
 # pprint.pprint(list(mydb.books.aggregate(authorPipeline)))
