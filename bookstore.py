@@ -16,36 +16,10 @@ mydb = myclient["book_database"]
 mycol = mydb["books"]
 app = FastAPI()
 
-
-books = {
-    1: {
-        "title": "The Catcher in the Rye",
-        "author": "J.D. Salinger",
-        "description": "The Catcher in the Rye is an American novel by J. D. Salinger that was partially published in serial form 1945–46 before being novelized in 1951. Originally intended for adults, it is often read by adolescents for its themes of angst and alienation, and as a critique of superficiality in society.",
-        "price": 8.93,
-        "stock": 7
-    },
-
-    2: {
-        "title": "Animal Farm",
-        "author": "George Orwell",
-        "description": "Animal Farm is a beast fable, in the form of a satirical allegorical novella, by George Orwell, first published in England on 17 August 1945. It tells the story of a group of farm animals who rebel against their human farmer, hoping to create a society where the animals can be equal, free, and happy.",
-        "price": 10.76,
-        "stock": 1
-    },
-
-    3: {
-        "title": "To Kill a Mockingbird",
-        "author": "Harper Lee",
-        "description": "To Kill a Mockingbird is a novel by the American author Harper Lee. It was published in 1960 and was instantly successful. In the United States, it is widely read in high schools and middle schools",
-        "price": 8.89,
-        "stock": 2
-    }
-}
-
+# Creating the database
 async def create():
+    # Deleting existing database for easier testing
     await mycol.delete_many({})
-
     await mydb.books.drop()
 
     x = await mydb.books.insert_many([
@@ -169,25 +143,14 @@ async def create():
             ("price", -1)
         ]
     )
+    return
 
-# for y in mycol.find():
-#     print(y)
-#     print("")
-# print("\n\n")
 
+# Aggregation Pipelines
 stockPipeline = [
     {"$unwind": "$stock"},
     {"$group": {'_id': None, "inStock":{"$sum": "$stock"}}}
 ]
-
-# print("Total number of books in the store: \n")
-# pprint.pprint(list(mydb.books.aggregate(stockPipeline)))
-# print("\n\n")
-
-async def numOfBooks():
-    print("Total number of books in the store: \n")
-    async for doc in mydb.books.aggregate(stockPipeline):
-        print(doc)
 
 booksPipeline = [
     {"$unwind": "$title"},
@@ -196,14 +159,6 @@ booksPipeline = [
     {"$limit": 5}
 ]
 
-# print("The top 5 bestselling books: \n")
-# pprint.pprint(list(mydb.books.aggregate(booksPipeline)))
-# print("\n\n")
-async def top5sellers():
-    print("The top 5 bestselling books: \n")
-    async for doc in mydb.books.aggregate(booksPipeline):
-        print(doc)
-
 authorPipeline = [
     {"$unwind": "$author"},
     {"$group": {"_id": "$author", "numOfBooksInStore": {"$sum": "$stock"}}},
@@ -211,13 +166,8 @@ authorPipeline = [
     {"$limit": 5}
 ]
 
-
-# async def top5authors():
-#     print("The top 5 authors with the most books in the store: \n")
-#     test = await mydb.books.aggregate(authorPipeline)
-#     await list(test)
-
-async def top5authors():
+# Aggregation
+async def aggregation():
     await create()
     totalnumofbooks = await mydb.books.aggregate(stockPipeline).to_list(None)
     top5sellerslist = await mydb.books.aggregate(booksPipeline).to_list(None)
@@ -228,16 +178,14 @@ async def top5authors():
     print(top5sellerslist)
     print("The top 5 authors with the most books in the store: \n")
     print(top5authorslist)
-# asyncio.get_event_loop().run_until_complete(numOfBooks())
-# asyncio.get_event_loop().run_until_complete(top5sellers())
+    return
 
-asyncio.get_event_loop().run_until_complete(top5authors())
-# list(mydb.books.aggregate(authorPipeline))
-# pprint.pprint(list(mydb.books.aggregate(authorPipeline)))
+# Running aggregation
+asyncio.create_task(aggregation()) # Run this line only when running "uvicorn bookstore:app --reload"
+# asyncio.run(aggregation()) # Run this line only When running python file itself
 
-# print("\n")
-# print(mycol.find())
 
+# Pydantic models and data validation
 class Book(BaseModel):
     title: str
     author: str
@@ -276,7 +224,6 @@ class Book(BaseModel):
         return v
 
 
-
 class UpdateBook(BaseModel):
     title: Optional[str] = None
     author: Optional[str] = None
@@ -285,6 +232,7 @@ class UpdateBook(BaseModel):
     stock: Optional[int] = None
 
 
+# API Endpoints
 @app.get('/')
 async def index():
     book_collection = []
@@ -292,16 +240,15 @@ async def index():
         book_collection.append(y)
     return book_collection
 
-# path parameter
-# DONE
+
 @app.get('/books/{book_id}')
 async def get_book(book_id: int = Path(description="The ID of the book you want to view", gt=0)):
     if await mycol.find_one({"_id": book_id}) is None:
-        return {"Error": "book does not exists"}
+        return {"Error": "Book does not exists"}
     x = await mycol.find_one({"_id": book_id})
     return x
 
-# DONE
+
 @app.get('/books')
 async def get_books():
     book_collection = []
@@ -310,23 +257,8 @@ async def get_books():
     return book_collection
 
 
-# Query parameter
-# @app.get('/search')
-# def get_book(name: str):
-#     for book_id in books:
-#         if books[book_id]["name"] == name:
-#             return books[book_id]
-#     return {"Data": "Not Found"}
-
-# Query parameter (Optional)
 @app.get('/search')
 async def search_book(title: Optional[str] = None, author: Optional[str] = None, min_price: Optional[float] = None, max_price: Optional[float] = None):
-    # for book_id in books:
-    #     if books[book_id]["name"] == name:
-    #         return books[book_id]
-
-    # if mycol.find_one({"_id": book_id}) is None:
-    #     return {"Error": "book does not exists"}
     main_q = {}
     if title != None:
         main_q["title"] = {"$regex": title.title()}
@@ -338,34 +270,13 @@ async def search_book(title: Optional[str] = None, author: Optional[str] = None,
         main_q["price"] = {"$gt": min_price}
     elif max_price != None:
         main_q["price"] = {"$lt": max_price}
-    # print(main_q)
 
     book_collection = []
     async for y in mycol.find(main_q):
         book_collection.append(y)
-    # print(book_collection)
     return book_collection
 
 
-# Query parameter (Optional) - ERROR without *
-# * allows us to write parameters anywhere we want
-# @app.get('/get-by-name-optional')
-# def get_student(*, name: Optional[str] = None, test: int):
-#     for book_id in books:
-#         if books[book_id]["name"] == name:
-#             return books[book_id]
-#     return {"Data": "Not Found"}
-
-# # combining path and query parameters
-# @app.get('/get-by-name-optional/{book_id}')
-# def get_student(*, student_id: int, name: Optional[str] = None, test: int):
-#     for book_id in books:
-#         if books[book_id]["name"] == name:
-#             return books[book_id]
-#     return {"Data": "Not Found"}
-
-# Request Body and the Post Method
-# DONE
 @app.post("/books")
 async def create_book(book: Book):
     num = 0
@@ -384,45 +295,12 @@ async def create_book(book: Book):
                                         "description":  book_description,
                                         "price": book_price,
                                         "stock": book_stock})
-            return {"Message": "book added successfully"}
+            return {"Message": "Book added successfully"}
 
-    # if mycol.find_one({"_id": book_id}) is None:
-    #     book_title = book.title
-    #     book_author = book.author
-    #     book_description = book.description
-    #     book_price = book.price
-    #     book_stock = book.stock
 
-    #     x = mydb.books.insert_one({"_id": book_id,
-    #                                 "title": book_title,
-    #                                 "author": book_author,
-    #                                 "description":  book_description,
-    #                                 "price": book_price,
-    #                                 "stock": book_stock})
-    #     return {"Message": "book added successfully"}
-    
-    # return {"Error": "book exists"}
-
-# PUT method
-# @app.put("/books/{book_id}")
-# def update_book(book_id: int, book: UpdateBook):
-#     if mycol.find_one({"_id": book_id}) is None:
-#         return {"Error": "book does not exists"}
-#     books[book_id] = book
-#     return books[book_id]
-
-# On updating just the name, other values gets overwritten by null.
-# {
-# name: "alex"
-# age: null
-# year: null
-# }
-
-# PUT method
 @app.put("/books/{book_id}")
-# DONE
 async def update_book(book_id: int, book: UpdateBook):
-    if mycol.find_one({"_id": book_id}) is None:
+    if await mycol.find_one({"_id": book_id}) is None:
         return {"Error": "book does not exists"}
     if book.title != None:
         book_title = book.title
@@ -449,26 +327,15 @@ async def update_book(book_id: int, book: UpdateBook):
         q = {"_id" : book_id}
         update = {"$set": {"stock": book_stock}}
         mycol.update_one(q, update)
-    return {"Message": "book updated successfully"}
+    return {"Message": "Book updated successfully"}
     
 
-        
-
-# On updating just the name, other values remains as it is.
-# {
-# name: "alex"
-# age: 24
-# year: 2021
-# }
-
-# Delete Method
-# DONE
-@app.delete("/delete-book/{book_id}")
+@app.delete("/books/{book_id}")
 async def delete_book(book_id: int):
-    if mycol.find_one({"_id": book_id}) is None:
-        return {"Error": "book does not exists"}
+    if await mycol.find_one({"_id": book_id}) is None:
+        return {"Error": "Book does not exists"}
     
     q = {"_id": book_id}
     mycol.delete_one(q)
     
-    return {"Message": "book deleted successfully"}
+    return {"Message": "Book deleted successfully"}
