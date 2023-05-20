@@ -1,7 +1,7 @@
 # 449_FinalProject
 ## Table of Contents
 1. [Demonstration](https://github.com/JedJaws/449_FinalProject#demonstration)
-2. [Objective](https://github.com/JedJaws/449_FinalProject#objective)
+2. [Documentation](https://github.com/JedJaws/449_FinalProject#objective)
 3. [Members](https://github.com/JedJaws/449_FinalProject#members)
 
 
@@ -19,29 +19,21 @@ Uploading File Demo Video:
 [![](https://i0.wp.com/css-tricks.com/wp-content/uploads/2015/11/drag-drop-upload-1.gif?ssl=1)](https://www.youtube.com/watch?v=dz6Oh0MD9Ds&ab_channel=PhuocNguyen)
  
 ## How to run:
-### Task 1: Setting up the Flask application
-* Create a **new Flask application** and set up the **necessary packages and modules.**
+### Step 1: Setting up the working environment
+* Utilize **git clone** for this repository and all **necessary packages and modules** should be provided within the virtual environment, **venv**.
 * **Create a virtual environment** for the application.
-* **Connect your Flask application** with the Database (MySQL preferably.)
-### Task 2: Error Handling
-* **Implement error handling** for your API to ensure that it returns proper error messages and status codes.
-* **Create error handlers*** for ex. 400, 401, 404, 500, and any other errors that you feel
-are necessary.
-* Make sure that error messages are **returned in a consistent format.**
-### Task 3: Authentication
-* Implement **authentication** for your **API** using **JWT.**
-* **Create a user model** with username and password fields.
-* **Implement a login endpoint** that authenticates the user and **returns a JWT token.**
-* **Implement a protected endpoint** that requires a valid JWT token to access.
-### Task 4: File Handling
-* **Implement file handling** for your API to allow users to upload files.
-* **Create an endpoint** that allows users to upload files. 
-* **Implement file validation** to ensure that files are uploading within the allowed file size limit.
-* **Store uploaded files** in a secure location. (A folder in your project's folder structure.)
-### Task 5: Public Route
-* **Create a public route** that allows users to view public information.
-* **Implement an endpoint** that returns a list of items that can be **viewed publicly.**
-* Ensure that this **endpoint does not require authentication.**
+### Step 2: Running Mongo
+* **Connect to MongoDB** by opening one terminal running the command **mongod**
+* Then utilize the terminal within the directory containing this repo with the venv activated.
+* Use the command **uvicorn bookstore:app --reload** to run the localhost
+* The link **http://127.0.0.1:8000** should appear as result of the command.
+* Follow the link and you should be taken to a webpage, add **/docs#/** to the end of the link.
+### Step 3: Aggregation and Endpoints
+* The command **uvicorn bookstore:app --reload** should also print out the aggregation data within the terminal.
+* The API endpoints can be seen and utilized within the localhost as mentioned in Step 2.
+* From that web page, each endpoint can be accessed by clicking on its tab, then to be used, simply click **try out**
+* If the endpoint requires parameters, input the parameters and click **Execute**. If there are not parameters, simply click **Execute**.
+* The desired output will be printed below in **responses**
 
 ## Members:
 * William Ye
