@@ -16,7 +16,7 @@ details.
 ## Demonstration:
 
 Uploading File Demo Video:
-[![](https://i0.wp.com/css-tricks.com/wp-content/uploads/2015/11/drag-drop-upload-1.gif?ssl=1)](https://www.youtube.com/watch?v=dz6Oh0MD9Ds&ab_channel=PhuocNguyen)
+[![](https://i0.wp.com/css-tricks.com/wp-content/uploads/2015/11/drag-drop-upload-1.gif?ssl=1)]([https://www.youtube.com/watch?v=dz6Oh0MD9Ds&ab_channel=PhuocNguyen](https://www.youtube.com/watch?v=z1UZkkVxW4Q&t=9s))
  
 ## How to run:
 ### Step 1: Setting up the working environment
