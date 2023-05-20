@@ -172,12 +172,18 @@ async def aggregation():
     totalnumofbooks = await mydb.books.aggregate(stockPipeline).to_list(None)
     top5sellerslist = await mydb.books.aggregate(booksPipeline).to_list(None)
     top5authorslist = await mydb.books.aggregate(authorPipeline).to_list(None)
-    print("Total number of books in the store: \n")
-    print(totalnumofbooks)
-    print("The top 5 bestselling books: \n")
-    print(top5sellerslist)
-    print("The top 5 authors with the most books in the store: \n")
-    print(top5authorslist)
+    print("")
+    print("Total number of books in the store: ", totalnumofbooks)
+    print("")
+
+    print("The top 5 bestselling books: ")
+    for books in top5sellerslist:
+        print(books)
+
+    print("")
+    print("The top 5 authors with the most books in the store: ")
+    for authors in top5authorslist:
+        print(authors)
     return
 
 # Running aggregation
